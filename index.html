@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<head>
+    <title>Minecraft</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/minecraftia" type="text/css"/>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body style="background-image: url('http://m.gettywallpapers.com/wp-content/uploads/2020/05/Minecraft-Wallpaper-1.jpg');">
+ <div class="container box" style="background-color: rgba(44, 44, 44, 0.9);">
+    <h1 class="text-white mc">Minecraft</h1>
+    <hr class="text-white">
+    <p class="text-white mc">
+        This is a simple Minecraft user lookup I made, have fun with it.
+    </p><br>
+    <div class="input-group mb-3">
+        <input id="uName" type="text" class="form-control" placeholder="Jet9451" aria-label="username" aria-describedby="username">
+        <button onclick="grabUInfo()" class="btn btn-outline-secondary" type="button" id="username">Lookup</button>
+      </div>
+      <br><br>
+      <div class="container" style="text-align: center;">
+        <div class="row">
+          <div class="col">
+            <img id="uAvatar" src="https://crafatar.com/avatars/cf601314-6d01-4ec5-ace5-823a64907302" width="75">
+          </div>
+          <div class="col">
+            <p id="uNameHistory" class="text-white mc"></p>
+          </div>
+          <div class="col">
+            <img id="uBody" src="https://crafatar.com/renders/body/cf601314-6d01-4ec5-ace5-823a64907302">
+          </div>
+        </div>
+      </div>
+ </div>
+
+ <script>
+     var NameHistory = document.getElementById("uNameHistory")
+     var userName = document.getElementById("uName")
+
+     function grabUInfo() {
+        fetch('https://api.mojang.com/users/profiles/minecraft/' + userName.value)
+       .then(response => response.text())
+       .then(data => NameHistory.innerHTML = data );
+     }
+ </script>
+
+</body>
