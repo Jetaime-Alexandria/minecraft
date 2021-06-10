@@ -1,0 +1,9 @@
+.mc {
+    font-family: MinecraftiaRegular;
+}
+
+.box {
+    margin-top: 3rem;
+    padding: 2rem;
+    min-height: 50rem;
+}
