@@ -1,48 +1,114 @@
 <!DOCTYPE html>
+
 <head>
-    <title>Minecraft</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/minecraftia" type="text/css"/>
-    <link rel="stylesheet" href="index.css">
+  <title>Minecraft</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/minecraftia" type="text/css" />
+  <link rel="stylesheet" href="index.css">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
-<body style="background-image: url('http://m.gettywallpapers.com/wp-content/uploads/2020/05/Minecraft-Wallpaper-1.jpg');">
- <div class="container box" style="background-color: rgba(44, 44, 44, 0.9);">
-    <h1 class="text-white mc">Minecraft</h1>
-    <hr class="text-white">
-    <p class="text-white mc">
-        This is a simple Minecraft user lookup I made, have fun with it.
-    </p><br>
-    <div class="input-group mb-3">
-        <input id="uName" type="text" class="form-control" placeholder="Jet9451" aria-label="username" aria-describedby="username">
-        <button onclick="grabUInfo()" class="btn btn-outline-secondary" type="button" id="username">Lookup</button>
+<body>
+  <h3 id="logo" class="mc" style="text-align: center; font-weight: bold;">Minecraft User Lookup</h3>
+  <div class="container">
+    <form id="jetsmells">
+      <div class="input-group mb-3">
+        <input id="fUsernameInput" type="text" class="form-control bg-dark mc text-white" placeholder="" aria-label="Username" aria-describedby="button-addon2">
+        <button class="btn btn-outline-secondary mc" type="submit" id="button-addon2">Lookup</button>
       </div>
-      <br><br>
-      <div class="container" style="text-align: center;">
+    </form>
+    <div class="container">
+      <div class="container mc">
         <div class="row">
           <div class="col">
-            <img id="uAvatar" src="https://crafatar.com/avatars/cf601314-6d01-4ec5-ace5-823a64907302" width="75">
+            <p style="color: gold;">Username:<br><span id="uUsername" style="color: white;"></span></p>
+            <p style="color: gold;">UUID:<Br><span id="uID" style="color: white;"></span></p>
+            <p style="color: gold;">Name History:</p>
+            <ol id="rNames"></ol>
           </div>
           <div class="col">
-            <p id="uNameHistory" class="text-white mc"></p>
-          </div>
-          <div class="col">
-            <img id="uBody" src="https://crafatar.com/renders/body/cf601314-6d01-4ec5-ace5-823a64907302">
-          </div>
+            <img id="uAvatar" src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif" width="75"><br><br>
+            <img id="uBody" src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif" width="100"><br><br>
+          </div>          
         </div>
       </div>
- </div>
+    </div>
+  </div>
+  <script>
+    function processForm(e) {
+      if (e.preventDefault) e.preventDefault();
 
- <script>
-     var NameHistory = document.getElementById("uNameHistory")
-     var userName = document.getElementById("uName")
+      var username = document.getElementById("fUsernameInput").value.toString();
+      if (username.length < 2) {
+        swal("Oops!", "Seems like you put a bit too short of a username huh?", "error")
+        return false
+      }
+      grabUInfo(username)
+      return false;
+    }
 
-     function grabUInfo() {
-        fetch('https://api.mojang.com/users/profiles/minecraft/' + userName.value)
-       .then(response => response.text())
-       .then(data => NameHistory.innerHTML = data );
-     }
- </script>
+    var form = document.getElementById('jetsmells');
+    if (form.attachEvent) {
+      form.attachEvent("submit", processForm);
+    } else {
+      form.addEventListener("submit", processForm);
+    }
 
+    function grabUInfo(name) {
+      var CORS = "https://unicorn-anywhere.herokuapp.com/"
+      var URL = `https://api.mojang.com/users/profiles/minecraft/${name}`
+      fetch(CORS + URL, {
+        headers: {
+          Origin: "https://example.com"
+        }
+      })
+        .then(async response => {
+          var response = await response;
+          var status = response.status;
+          if (status != 200) {
+            switch (status) {
+              case 204:
+                swal("Oops!", "The user you're trying to receive information about doesn't exist", "error")
+                return
+              default:
+                swal("Oops!", `An unknown error has occured (Status code: ${status}).`, "error")
+                return;
+            }
+          }
+          var data = await response.json()
+          var username = document.getElementById("fUsernameInput")
+          var usrElement = document.getElementById("uUsername")
+          var idElement = document.getElementById("uID")
+          var avatarElement = document.getElementById("uAvatar")
+          var bodyElement = document.getElementById("uBody")
+
+          username.placeholder = data.name
+          usrElement.innerText = data.name
+          idElement.innerText = data.id
+          avatarElement.src = `https://crafatar.com/avatars/${data.id}`
+          bodyElement.src = `https://crafatar.com/renders/body/${data.id}`
+
+          fetch(CORS + `https://unicorn-anywhere.herokuapp.com/https://api.mojang.com/user/profiles/${data.id}/names`).then(async response => {
+            var response = await response;
+            var recentnames = await response.json();
+            var rElement = document.getElementById("rNames")
+            Array.from(rElement.children).forEach(f => f.remove())
+            recentnames.forEach(n => {
+              var owo = document.createElement("li")
+              owo.innerText = n.name
+              rElement.append(owo)
+            })
+          })
+        })
+    }
+
+    grabUInfo("Notch")
+  </script>
 </body>
+<footer>
+  <span class="mc">Website created by <a href="#">Jetaime-Alexandria</a>, with help from <a href="#">JacubRSTNC</a>. This website is not affiliated with Mojang AB.</span>
+</footer>

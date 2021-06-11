@@ -2,8 +2,25 @@
     font-family: MinecraftiaRegular;
 }
 
-.box {
-    margin-top: 3rem;
+#logo {
     padding: 2rem;
-    min-height: 50rem;
+}
+
+* {
+    color: white;
+}
+
+li {
+    list-style: disc;
+}
+
+body {
+    background-image: url('https://i.redd.it/l2idgwv1e9n31.jpg');
+    background-size: cover;
+}
+
+footer {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
 }
